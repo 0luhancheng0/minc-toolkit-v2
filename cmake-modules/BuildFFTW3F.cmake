@@ -71,11 +71,11 @@ macro(build_fftw3f install_prefix staging_prefix)
   ENDIF(MT_USE_OPENMP)
 
 
-  GET_PACKAGE("http://www.fftw.org/fftw-3.3.8.tar.gz" "8aac833c943d8e90d51b697b27d4384d" "fftw-3.3.8.tar.gz" FFTW_PATH )
+  GET_PACKAGE("http://www.fftw.org/fftw-3.3.9.tar.gz" "50145bb68a8510b5d77605f11cadf8dc" "fftw-3.3.9.tar.gz" FFTW_PATH )
 
     ExternalProject_Add(FFTW3F
       URL  "${FFTW_PATH}"
-      URL_MD5 "8aac833c943d8e90d51b697b27d4384d"
+      URL_MD5 "50145bb68a8510b5d77605f11cadf8dc"
       UPDATE_COMMAND ""
       SOURCE_DIR FFTW3F
       BINARY_DIR FFTW3F-build

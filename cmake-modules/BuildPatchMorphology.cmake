@@ -4,7 +4,8 @@ macro(build_PatchMorphology install_prefix staging_prefix itk_dir)
   else()
     set(CMAKE_GEN "${CMAKE_GENERATOR}")
   endif()
-  message("OpenBLAS_DIR=${OpenBLAS_DIR}")
+
+
   set(CMAKE_EXTERNAL_PROJECT_ARGS
         -DCMAKE_CXX_COMPILER:FILEPATH=${CMAKE_CXX_COMPILER}
         -DCMAKE_C_COMPILER:FILEPATH=${CMAKE_C_COMPILER}
@@ -40,10 +41,6 @@ macro(build_PatchMorphology install_prefix staging_prefix itk_dir)
         -DCMAKE_STATIC_LINKER_FLAGS_RELEASE:STRING=${CMAKE_STATIC_LINKER_FLAGS_RELEASE}
         -DCMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=${CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO}
         -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
-        -DOpenBLAS_INCLUDE_DIR:PATH=${OpenBLAS_INCLUDE_DIRS}
-        -DOpenBLAS_LIBRARY:PATH=${OpenBLAS_LIBRARY}
-        -DCMAKE_DISABLE_FIND_PACKAGE_OpenBLAS:BOOL=ON
-        -DOpenBLAS_DIR:PATH=${OpenBLAS_DIR}
         -DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}
         -DBUILD_TESTING:BOOL=${BUILD_TESTING}
         -DCMAKE_INSTALL_PREFIX:PATH=${install_prefix}
@@ -52,6 +49,18 @@ macro(build_PatchMorphology install_prefix staging_prefix itk_dir)
         -DMACOSX_RPATH:BOOL=ON
         -DCMAKE_INSTALL_RPATH:PATH=${install_prefix}/lib${LIB_SUFFIX}
   )
+
+  if(BLAS_FOUND)
+    list(APPEND CMAKE_EXTERNAL_PROJECT_ARGS
+        -DOpenBLAS_INCLUDE_DIR:PATH=${OpenBLAS_INCLUDE_DIRS}
+        -DOpenBLAS_LIBRARY:PATH=${OpenBLAS_LIBRARY}
+        -DCMAKE_DISABLE_FIND_PACKAGE_OpenBLAS:BOOL=ON
+        -DOpenBLAS_DIR:PATH=${OpenBLAS_DIR}
+    )
+  else()
+      message("Disabling BLAS")
+  endif()
+
   if(APPLE)
     list(APPEND CMAKE_EXTERNAL_PROJECT_ARGS
       -DCMAKE_OSX_ARCHITECTURES:STRING=${CMAKE_OSX_ARCHITECTURES}
@@ -61,6 +70,7 @@ macro(build_PatchMorphology install_prefix staging_prefix itk_dir)
 #      -DCMAKE_CXX_COMPILER:FILEPATH=${ITK_CXX_COMPILER}
     )
   endif()
+
 
   ExternalProject_Add(patch_morphology
     SOURCE_DIR ${CMAKE_SOURCE_DIR}/patch_morphology

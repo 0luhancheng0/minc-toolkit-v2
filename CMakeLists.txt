@@ -536,7 +536,9 @@ ADD_DEPENDENCIES(BEAST minc_io)
 IF(MT_BUILD_OPENBLAS)
     ADD_DEPENDENCIES(BEAST OpenBLAS)
 ELSE()
-    FIND_PACKAGE(OpenBLAS )
+    #FIND_PACKAGE(OpenBLAS )
+    set(BLA_VENDOR OpenBLAS) # search for OpenBlas for now
+    find_package(BLAS QUIET)
 ENDIF()
 
 
